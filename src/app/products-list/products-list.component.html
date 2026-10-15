@@ -1,0 +1,35 @@
+<h2>Products</h2>
+    <a routerLink="/products/new">+ Додати товар</a>
+
+    <div>
+      <label>Категорія:
+        <select (change)="onCategoryChange($any($event.target).value)">
+          <option value="">All</option>
+          @for (c of categories(); track c) {
+            <option [value]="c">{{ c }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    @if (loading()) { <p>Loading...</p> }
+
+    <ul>
+      @for (p of pageItems(); track p.id) {
+        <li>
+          <a [routerLink]="['/products', p.id]">{{ p.title }}</a> — {{ p.price }}$
+        </li>
+      }
+    </ul>
+
+    <button (click)="prev()" [disabled]="page() === 1">Назад</button>
+    Сторінка {{ page() }} з {{ totalPages() }}
+    <button (click)="next()" [disabled]="page() === totalPages()">Далі</button>
+
+    <div style="margin-top: 800px">
+      @defer (on viewport) {
+        <app-product-stats />
+      } @placeholder {
+        <p>Loading stats...</p>
+      }
+    </div>
